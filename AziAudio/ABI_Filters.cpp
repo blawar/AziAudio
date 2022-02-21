@@ -86,7 +86,7 @@ void FILTER2() {
 	static int cnt = 0;
 	static s16 *lutt6;
 	static s16 *lutt5;
-	u8 *save = DRAM + (t9 & 0xFFFFFF);
+	u8 *save = DRAM + t9; // TODO FIX (t9 & 0xFFFFFF);
 	u8 t4 = (u8)((k0 >> 0x10) & 0xFF);
 
 	if (t4 > 1) { // Then set the cnt variable
@@ -173,7 +173,7 @@ void POLEF()
 #endif
 	u8 Flags = (u8)((k0 >> 16) & 0xff);
 	s16 Gain = (u16)(k0 & 0xffff);
-	u32 Address = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	u32 Address = t9; // TODO FIX (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
 
 	s16 *dst = (s16 *)(BufferSpace + AudioOutBuffer);
 

@@ -16,10 +16,16 @@
 #if !defined(_WIN32) && !defined(_XBOX)
 #include <unistd.h>
 #endif
+#include "WASAPISoundDriver.h"
+#include "DirectSoundDriver.h"
 
 bool NoSoundDriver::ClassRegistered = NoSoundDriver::ValidateDriver() ?
 		SoundDriverFactory::RegisterSoundDriver(SND_DRIVER_NOSOUND, NoSoundDriver::CreateSoundDriver, "No Sound Driver", 0) :
 		false;
+
+bool WASAPISoundDriver::ClassRegistered = WASAPISoundDriver::ValidateDriver() ? SoundDriverFactory::RegisterSoundDriver(SND_DRIVER_WASAPI, WASAPISoundDriver::CreateSoundDriver, "WASAPI Driver (experimental)", 1) : false;
+
+bool DirectSoundDriver::ClassRegistered = DirectSoundDriver::ValidateDriver() ? SoundDriverFactory::RegisterSoundDriver(SND_DRIVER_DS8, DirectSoundDriver::CreateSoundDriver, "DirectSound 8 Driver", 6) : false;
 
 bool NoSoundDriver::ValidateDriver()
 {

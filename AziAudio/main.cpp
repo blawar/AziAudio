@@ -9,6 +9,7 @@
 *                                                                           *
 ****************************************************************************/
 
+#if 1
 #include "common.h"
 #include "AudioSpec.h"
 
@@ -39,23 +40,8 @@ void SetTimerResolution(void);
   void RedirectIOToConsole();
 #endif
 
-HINSTANCE hInstance;
-
 #ifdef __GNUC__
 extern "C"
-#endif
-
-#ifdef _WIN32
-BOOL WINAPI DllMain(
-  HINSTANCE hinstDLL,  // handle to DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
-  ) {
-	UNREFERENCED_PARAMETER(lpvReserved);
-	UNREFERENCED_PARAMETER(fdwReason);
-	hInstance = hinstDLL;
-	return TRUE;
-}
 #endif
 
 EXPORT void CALL DllAbout(HWND hParent) {
@@ -95,6 +81,8 @@ AUDIO_INFO AudioInfo;
 u32 Dacrate = 0;
 
 EXPORT Boolean CALL InitiateAudio(AUDIO_INFO Audio_Info) {
+	Configuration::LoadDefaults();
+
 	if (snd != NULL)
 	{
 		snd->AI_Shutdown();
@@ -114,9 +102,6 @@ EXPORT Boolean CALL InitiateAudio(AUDIO_INFO Audio_Info) {
 	}
 
 	memcpy(&AudioInfo, &Audio_Info, sizeof(AUDIO_INFO));
-	DRAM = Audio_Info.RDRAM;
-	DMEM = Audio_Info.DMEM;
-	IMEM = Audio_Info.IMEM;
 
 	Configuration::LoadDefaults();
 	snd = SoundDriverFactory::CreateSoundDriver(Configuration::getDriver());
@@ -150,7 +135,7 @@ EXPORT void CALL GetDllInfo(PLUGIN_INFO * PluginInfo) {
 EXPORT void CALL ProcessAList(void) {
 	if (snd == NULL)
 		return;
-	HLEStart ();
+	//HLEStart ();
 }
 
 EXPORT void CALL RomOpen(void) 
@@ -354,4 +339,6 @@ void SetTimerResolution(void)
 		NtSetTimerResolution(10000, TRUE, &CurrentResolution);
 	}
 }
+#endif
+
 #endif

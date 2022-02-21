@@ -195,7 +195,7 @@ EXPORT Boolean CALL InitiateAudio(AUDIO_INFO Audio_Info);
             processed. The Dll will have to work out all the info
 			about the AList itself.
   input:    none
-  output:   none
+  output:   none0
 *******************************************************************/ 
 EXPORT void CALL ProcessAList(void);
 
@@ -213,7 +213,34 @@ EXPORT void CALL AiCallBack(void);
 
 extern AUDIO_INFO AudioInfo;
 
-void HLEStart ();
+typedef struct
+{
+	/* 0x00 */ u32 type;
+	/* 0x04 */ u32 flags;
+
+	/* 0x08 */ u64* ucode_boot;
+	/* 0x0C */ u32 ucode_boot_size;
+
+	/* 0x10 */ u64* ucode;
+	/* 0x14 */ u32 ucode_size;
+
+	/* 0x18 */ u64* ucode_data;
+	/* 0x1C */ u32 ucode_data_size;
+
+	/* 0x20 */ u64* dram_stack;
+	/* 0x24 */ u32 dram_stack_size;
+
+	/* 0x28 */ u64* output_buff;
+	/* 0x2C */ u64* output_buff_size;
+
+	/* 0x30 */ u64* data_ptr;
+	/* 0x34 */ u32 data_size;
+
+	/* 0x38 */ u64* yield_data_ptr;
+	/* 0x3C */ u32 yield_data_size;
+} AZI_OSTask; // size = 0x40
+
+void HLEStart(AZI_OSTask* task);
 void ChangeABI (int type); /* type 0 = SafeMode */
 
 #define AI_STATUS_FIFO_FULL	0x80000000		/* Bit 31: full */

@@ -9,6 +9,9 @@
 *                                                                           *
 ****************************************************************************/
 
+#define SWAP32(data) ((((data) >> 24) & 0x000000FF) | (((data) >> 8) & 0x0000FF00) | (((data) << 8) & 0x00FF0000) | (((data) << 24) & 0xFF000000))
+#define BE32(x) SWAP32(x)
+
 /* memset() and memcpy() */
 #include <string.h>
 
@@ -25,9 +28,7 @@ u32 t9, k0;
 u64 ProfileStartTimes[30];
 u64 ProfileTimes[30];
 
-u8 * DMEM;
-u8 * IMEM;
-u8 * DRAM;
+u8* DRAM = nullptr;
 
 // Variables needed for ABI HLE
 u8 BufferSpace[0x10000];
@@ -115,27 +116,26 @@ FILE *dfile = fopen ("d:\\HLEInfo.txt", "wt");
 extern "C"
 {
 	// MusyX HLE provided by Mupen64Plus authored by Bobby Smiles
-	void ProcessMusyX_v1();
-	void ProcessMusyX_v2();
+	//void ProcessMusyX_v1();
+	//void ProcessMusyX_v2();
 }
 
-u32 base, dmembase;
+//u32 base, dmembase;
 
-void HLEStart() {
-	u32 List = ((u32*)DMEM)[0xFF0 / 4], ListLen = ((u32*)DMEM)[0xFF4 / 4];
-	u32 *HLEPtr = (u32 *)(DRAM + List);
+void HLEStart(AZI_OSTask* task)
+{
+	u32* HLEPtr = (u32*)task->data_ptr;
+	u32 ListLen = task->data_size;
 
-	UCData = ((u32*)DMEM)[0xFD8 / 4];
-	UDataLen = ((u32*)DMEM)[0xFDC / 4];
-	base = ((u32*)DMEM)[0xFD0 / 4];
-	dmembase = ((u32*)DMEM)[0xFD8 / 4];
+	u8* UData = (u8*)task->ucode_data;
+	UDataLen = task->ucode_data_size;
+	//base = ((u32*)DMEM)[0xFD0 / 4];
+	//dmembase = ((u32*)DMEM)[0xFD8 / 4];
 
 	loopval = 0;
 	memset(SEGMENTS, 0, 0x10 * 4);
 	isMKABI = false;
 	isZeldaABI = false;
-
-	u8 * UData = DRAM + UCData;
 
 	// Detect uCode
 	if (((u32*)UData)[0] != 0x1) {
@@ -145,7 +145,7 @@ void HLEStart() {
 				// RogueSquadron, ResidentEvil2, PolarisSnoCross,
 				// TheWorldIsNotEnough, RugratsInParis, NBAShowTime,
 				// HydroThunder, Tarzan, GauntletLegend, Rush2049
-				ProcessMusyX_v1();
+				//ProcessMusyX_v1();
 				return;
 			default:
 				return;
@@ -177,11 +177,12 @@ void HLEStart() {
 			}
 		}
 		else  
-		{ 
+		{
+			u32 d = *(u32*)(UData + (0x10));
 			switch (*(u32*)(UData + (0x10))) // ABI2 and MusyX
 			{
 				case 0x00010010: // MusyX v2 (IndianaJones, BattleForNaboo)
-					ProcessMusyX_v2();
+					//ProcessMusyX_v2();
 					return;
 				default:
 					return;

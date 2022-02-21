@@ -84,9 +84,7 @@
 
 extern u32 t9, k0;
 
-extern u8 * DMEM;
-extern u8 * IMEM;
-extern u8 * DRAM;
+extern u8* DRAM;
 
 extern u32 UCData, UDataLen;
 

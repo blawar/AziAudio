@@ -14,12 +14,15 @@
 #include <stdio.h>
 #include "DirectSoundDriver.h"
 #include "AudioSpec.h"
-//#include "WaveOut.h"
+#ifdef TEST_WAV
+#include "WaveOut.h"
+#endif
 #include "SoundDriverFactory.h"
 
+/*
 bool DirectSoundDriver::ClassRegistered = DirectSoundDriver::ValidateDriver() ?
 			SoundDriverFactory::RegisterSoundDriver(SND_DRIVER_DS8, DirectSoundDriver::CreateSoundDriver, "DirectSound 8 Driver", 6) :
-			false;
+			false;*/
 
 // TODO: Clean this up a bit...
 static DWORD sLOCK_SIZE;
@@ -40,7 +43,9 @@ static DWORD buffsize = 0;
 static DWORD laststatus = 0;
 static DWORD interruptcnt = 0;
 
-//WaveOut test;
+#ifdef TEST_WAV
+WaveOut test;
+#endif
 
 bool DirectSoundDriver::ValidateDriver()
 {
@@ -430,7 +435,9 @@ void DirectSoundDriver::AiUpdate(BOOL Wait) {
 void DirectSoundDriver::StopAudio() {
 	if (!audioIsPlaying) return;
 	DEBUG_OUTPUT("DS8: StopAudio()\n");
-	//test.EndWaveOut();
+#ifdef TEST_WAV
+	test.EndWaveOut();
+#endif
 	if (lpdsbuf != NULL)
 	{
 		lpdsbuf->Stop();
@@ -460,7 +467,10 @@ void DirectSoundDriver::StartAudio() {
 	{
 		this->handleAudioThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AudioThreadProc, this, 0, &this->dwAudioThreadId);
 	}
-	//test.BeginWaveOut("D:\\test.wav", 2, 16, SampleRate);
+
+#ifdef TEST_WAV
+	test.BeginWaveOut("test.wav", 2, 16, SampleRate);
+#endif
 	if (lpdsbuf != NULL)
 	{
 		IDirectSoundBuffer_Play(lpdsbuf, 0, 0, DSBPLAY_LOOPING);

@@ -8,7 +8,11 @@
 * GNU/GPLv2 http://www.gnu.org/licenses/gpl-2.0.html                        *
 *                                                                           *
 ****************************************************************************/
-
+#if 0
+#define FFFC_MASK 0xfffc
+#else
+#define FFFC_MASK 0xFFFF
+#endif
 /* memset() and memcpy() */
 #include <string.h>
 
@@ -17,8 +21,8 @@
 void CLEARBUFF() {
 	u32 addr = (u32)(k0 & 0xffff);
 	u32 count = (u32)(t9 & 0xffff);
-	addr &= 0xFFFC;
-	memset(BufferSpace + addr, 0, (count + 3) & 0xFFFC);
+	addr &= FFFC_MASK;
+	memset(BufferSpace + addr, 0, (count + 3) & FFFC_MASK);
 }
 
 void CLEARBUFF2() {
@@ -42,7 +46,7 @@ void DMEMMOVE() {
 	v0 = (k0 & 0xFFFF);
 	v1 = (t9 >> 0x10);
 
-	u32 count = ((t9 + 3) & 0xfffc);
+	u32 count = ((t9 + 3) & FFFC_MASK);
 
 	for (cnt = 0; cnt < count; cnt += 4) {
 		BufferSpace[BES(v1 + cnt + 0)] = BufferSpace[BES(v0 + cnt + 0)];
@@ -61,9 +65,9 @@ void DMEMMOVE2() { // Needs accuracy verification...
 	v1 = (t9 >> 0x10);
 	//assert ((v1 & 0x3) == 0);
 	//assert ((v0 & 0x3) == 0);
-	u32 count = ((t9 + 3) & 0xfffc);
-	//v0 = (v0) & 0xfffc;
-	//v1 = (v1) & 0xfffc;
+	u32 count = ((t9 + 3) & FFFC_MASK);
+	//v0 = (v0) & FFFC_MASK;
+	//v1 = (v1) & FFFC_MASK;
 
 	//memcpy (dmem+v1, dmem+v0, count-1);
 	for (cnt = 0; cnt < count; cnt += 4) {
@@ -79,7 +83,7 @@ void DMEMMOVE3() { // Needs accuracy verification...
 	u32 cnt;
 	v0 = (k0 & 0xFFFF) + 0x4f0;
 	v1 = (t9 >> 0x10) + 0x4f0;
-	u32 count = ((t9 + 3) & 0xfffc);
+	u32 count = ((t9 + 3) & FFFC_MASK);
 
 	//memcpy (dmem+v1, dmem+v0, count-1);
 	for (cnt = 0; cnt < count; cnt += 4) {
@@ -111,21 +115,21 @@ void LOADBUFF() { // memcpy causes static... endianess issue :(
 	u32 v0;
 	if (AudioCount == 0)
 		return;
-	v0 = (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(BufferSpace + (AudioInBuffer & 0xFFFC), DRAM + v0, (AudioCount + 3) & 0xFFFC);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
+	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), DRAM + v0, (AudioCount + 3) & FFFC_MASK);
 }
 
 void LOADBUFF2() { // Needs accuracy verification...
 	u32 v0;
 	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
-	v0 = (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(BufferSpace + (k0 & 0xfffc), DRAM + v0, (cnt + 3) & 0xFFFC);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
+	memcpy(BufferSpace + (k0 & FFFC_MASK), DRAM + v0, (cnt + 3) & FFFC_MASK);
 }
 
 void LOADBUFF3() {
 	u32 v0;
 	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
-	v0 = (t9 & 0xfffffc);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);
 	u32 src = (k0 & 0xffc) + 0x4f0;
 	memcpy(BufferSpace + src, DRAM + v0, cnt);
 }
@@ -135,21 +139,21 @@ void SAVEBUFF() { // memcpy causes static... endianess issue :(
 	u32 v0;
 	if (AudioCount == 0)
 		return;
-	v0 = (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(DRAM + v0, BufferSpace + (AudioOutBuffer & 0xFFFC), (AudioCount + 3) & 0xFFFC);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
+	memcpy(DRAM + v0, BufferSpace + (AudioOutBuffer & FFFC_MASK), (AudioCount + 3) & FFFC_MASK);
 }
 
 void SAVEBUFF2() { // Needs accuracy verification...
 	u32 v0;
 	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
-	v0 = (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(DRAM + v0, BufferSpace + (k0 & 0xfffc), (cnt + 3) & 0xFFFC);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
+	memcpy(DRAM + v0, BufferSpace + (k0 & FFFC_MASK), (cnt + 3) & FFFC_MASK);
 }
 
 void SAVEBUFF3() {
 	u32 v0;
 	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
-	v0 = (t9 & 0xfffffc);
+	v0 = t9; // TODO FIX (t9 & 0xfffffc);
 	u32 src = (k0 & 0xffc) + 0x4f0;
 	memcpy(DRAM + v0, BufferSpace + src, cnt);
 }
