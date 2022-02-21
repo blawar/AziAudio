@@ -10,9 +10,27 @@
 ****************************************************************************/
 #include "SoundDriverFactory.h"
 #include "NoSoundDriver.h"
+#include "DirectSoundDriver.h"
+#include "DirectSoundDriverLegacy.h"
+#include "WASAPISoundDriver.h"
+#include "WaveOutSoundDriver.h"
+#include "XAudio2SoundDriver.h"
+#include "XAudio2SoundDriverLegacy.h"
 
 int SoundDriverFactory::FactoryNextSlot = 0;
 SoundDriverFactory::FactoryDriversStruct SoundDriverFactory::FactoryDrivers[MAX_FACTORY_DRIVERS];
+
+int SoundDriverFactory::InitDrivers()
+{
+	return
+		NoSoundDriver::ClassRegistered
+		+ DirectSoundDriver::ClassRegistered
+		+ DirectSoundDriverLegacy::ClassRegistered
+		+ WASAPISoundDriver::ClassRegistered 
+		+ WaveOutSoundDriver::ClassRegistered
+		+ XAudio2SoundDriver::ClassRegistered
+		+ XAudio2SoundDriverLegacy::ClassRegistered;
+}
 
 SoundDriverInterface* SoundDriverFactory::CreateSoundDriver(SoundDriverType DriverID)
 {
@@ -120,6 +138,11 @@ SoundDriverType SoundDriverFactory::DefaultDriver()
 
 int SoundDriverFactory::EnumDrivers(SoundDriverType *drivers, int max_entries)
 {
+	if(InitDrivers() != FactoryNextSlot)
+	{
+		printf("Expected %d drivers, got %d", InitDrivers(), FactoryNextSlot);
+	}
+
 	int retVal = 0;
 	for (int x = 0; x < FactoryNextSlot; x++)
 	{

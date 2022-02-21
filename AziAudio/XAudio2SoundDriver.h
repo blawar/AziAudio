@@ -77,6 +77,7 @@ public:
 
 	static SoundDriverInterface* CreateSoundDriver() { return new XAudio2SoundDriver(); }
 	static bool ValidateDriver();
+	static bool ClassRegistered;
 
 protected:
 
@@ -86,7 +87,6 @@ protected:
 private:
 	HANDLE hAudioThread;
 	bool   bStopAudioThread;
-	static bool ClassRegistered;
 };
 
 /*

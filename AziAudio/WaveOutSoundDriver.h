@@ -44,6 +44,7 @@ public:
 
 	static SoundDriverInterface* CreateSoundDriver() { return new WaveOutSoundDriver(); }
 	static bool ValidateDriver();
+	static bool ClassRegistered;
 
 protected:
 
@@ -58,9 +59,6 @@ protected:
 	u8 *m_BufferMemory;
 	bool bIsDone;
 	u32 SampleRate;
-
-private:
-	static bool ClassRegistered;
 };
 
 #if !defined(_MSC_VER)

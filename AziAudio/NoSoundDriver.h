@@ -51,7 +51,7 @@ public:
 
 	static SoundDriverInterface* CreateSoundDriver() { return new NoSoundDriver(); }
 	static bool ValidateDriver();
-
+	static bool ClassRegistered;
 protected:
 	bool dllInitialized;
 	/*
@@ -61,8 +61,5 @@ protected:
 	LARGE_INTEGER countsPerSample;
 	*/
 	bool isPlaying;
-	u32 lastTick;
-
-private:
-	static bool ClassRegistered;
+	u32 lastTick;	
 };

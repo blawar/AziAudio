@@ -19,10 +19,10 @@
 #endif
 #include "SoundDriverFactory.h"
 
-/*
+
 bool DirectSoundDriver::ClassRegistered = DirectSoundDriver::ValidateDriver() ?
 			SoundDriverFactory::RegisterSoundDriver(SND_DRIVER_DS8, DirectSoundDriver::CreateSoundDriver, "DirectSound 8 Driver", 6) :
-			false;*/
+			false;
 
 // TODO: Clean this up a bit...
 static DWORD sLOCK_SIZE;

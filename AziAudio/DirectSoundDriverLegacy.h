@@ -85,7 +85,6 @@ public:
 
 	static SoundDriverInterface* CreateSoundDriver() { return new DirectSoundDriverLegacy(); }
 	static bool ValidateDriver();
-private:
 	static bool ClassRegistered;
 
 };

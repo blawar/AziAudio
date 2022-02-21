@@ -36,6 +36,7 @@ public:
 	static bool RegisterSoundDriver(SoundDriverType DriverType, SoundDriverCreationFunction CreateFunction, const char *Description, int Priority);
 	static SoundDriverType DefaultDriver();
 	static int EnumDrivers(SoundDriverType *drivers, int max_entries);
+	static int InitDrivers();
 	static const char* GetDriverDescription(SoundDriverType driver);
 	static bool DriverExists(SoundDriverType driver);
 };

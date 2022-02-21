@@ -46,7 +46,7 @@ public:
 	//u32 WASAPISoundDriver::LoadAiBuffer(u8 *start, u32 length);
 
 	static bool ValidateDriver();
-
+	static bool ClassRegistered;
 protected:
 	static DWORD WINAPI AudioThreadProc(LPVOID lpParameter);
 
@@ -58,7 +58,6 @@ private:
 	HANDLE hAudioThread;
 	bool   bStopAudioThread;
 	bool   m_CoUninit;
-	static bool ClassRegistered;
 };
 
 #if !defined(_MSC_VER)
