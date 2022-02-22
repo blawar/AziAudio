@@ -180,7 +180,7 @@ void ADPCM_madd(s32* a, s16* book1, s16* book2, s16 l1, s16 l2, s16* inp)
 void ADPCM() { // Work in progress! :)
 	u8 Flags = (u8)((k0 >> 16) & 0xff);
 	//u16 Gain = (u16)(k0 & 0xffff);
-	u32 Address = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	u32 Address = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u16 inPtr = 0;
 	//s16 *out=(s16 *)(testbuff+(AudioOutBuffer>>2));
 	s16 *out = (s16 *)(BufferSpace + AudioOutBuffer);
@@ -285,7 +285,7 @@ void ADPCM() { // Work in progress! :)
 void ADPCM2() { // Verified to be 100% Accurate...
 	u8 Flags = (u8)((k0 >> 16) & 0xff);
 //	u16 Gain = (u16)(k0 & 0xffff);
-	u32 Address = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	u32 Address = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u16 inPtr = 0;
 	//s16 *out=(s16 *)(testbuff+(AudioOutBuffer>>2));
 	s16 *out = (s16 *)(BufferSpace + AudioOutBuffer);
@@ -504,7 +504,7 @@ void LOADADPCM() { // Loads an ADPCM table - Works 100% Now 03-13-01
 	u32 v0;
 	size_t i, limit;
 
-	v0 = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	v0 = t9;// + SEGMENTS[(t9>>24)&0xf];
 	//	if (v0 > (1024*1024*8))
 	//		v0 = (t9 & 0xffffff);
 	//	memcpy (dmem+0x4c0, rdram+v0, k0&0xffff); // Could prolly get away with not putting this in dmem
@@ -520,7 +520,7 @@ void LOADADPCM2() { // Loads an ADPCM table - Works 100% Now 03-13-01
 	u32 v0;
 	size_t i, limit;
 
-	v0 = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	v0 = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u16 *table = (u16 *)(DRAM + v0); // Zelda2 Specific...
 
 	limit = (k0 & 0x0000FFFF) >> 4;
