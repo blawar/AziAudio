@@ -75,7 +75,9 @@
  *
  * Just a little bit of name-mangling should fix this collision.
  */
+#if 0
 #define k0      GPR_k0
+#endif
 
 //------------------------------------------------------------------------------------------
 

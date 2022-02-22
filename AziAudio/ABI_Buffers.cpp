@@ -19,21 +19,21 @@
 #include "audiohle.h"
 
 void CLEARBUFF() {
-	u32 addr = (u32)(k0 & 0xffff);
+	u32 addr = (u32)k0;
 	u32 count = (u32)(t9 & 0xffff);
 	addr &= FFFC_MASK;
 	memset(BufferSpace + addr, 0, (count + 3) & FFFC_MASK);
 }
 
 void CLEARBUFF2() {
-	u16 addr = (u16)(k0 & 0xffff);
+	u16 addr = (u16)k0;
 	u16 count = (u16)(t9 & 0xffff);
 	if (count > 0)
 		memset(BufferSpace + addr, 0, count);
 }
 
 void CLEARBUFF3() {
-	u16 addr = (u16)(k0 & 0xffff);
+	u16 addr  = (u16)k0;
 	u16 count = (u16)(t9 & 0xffff);
 	memset(BufferSpace + addr + 0x4f0, 0, count);
 }
@@ -159,7 +159,7 @@ void SAVEBUFF3() {
 }
 
 void SEGMENT() { // Should work
-	SEGMENTS[(t9 >> 24) & 0xf] = (t9 & 0xffffff);
+	SEGMENTS[(t9 >> 24) & 0xf] = t9;
 }
 
 void SEGMENT2() {
@@ -198,15 +198,15 @@ void SETBUFF2() {
 }
 
 void SETLOOP() {
-	loopval = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	loopval = t9;// + SEGMENTS[(t9>>24)&0xf];
 	//VolTrg_Left  = (s16)(loopval>>16);		// m_LeftVol
 	//VolRamp_Left = (s16)(loopval);	// m_LeftVolTarget
 }
 
 void SETLOOP2() {
-	loopval = t9 & 0xffffff; // No segment?
+	loopval = t9; // No segment?
 }
 
 void SETLOOP3() {
-	loopval = (t9 & 0xffffff);
+	loopval = t9;
 }

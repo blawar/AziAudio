@@ -217,8 +217,10 @@ EXPORT void CALL AiDacrateChanged(int SystemType) {
 
 EXPORT void CALL AiLenChanged(void) 
 {
-	u32 address = (*AudioInfo.AI_DRAM_ADDR_REG & 0x00FFFFF8);
-	u32 length = (*AudioInfo.AI_LEN_REG & 0x3FFF8);
+	//u32 address = (*AudioInfo.AI_DRAM_ADDR_REG & 0x00FFFFF8);
+	//u32 length = (*AudioInfo.AI_LEN_REG & 0x3FFF8);
+	u32 address = *AudioInfo.AI_DRAM_ADDR_REG;
+	u32 length  = *AudioInfo.AI_LEN_REG;
 
 	if (snd == NULL)
 		return;

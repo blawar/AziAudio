@@ -62,7 +62,7 @@ s32 MultAddLUT(s16 *src, u32 srcPtr, u32 location)
 void RESAMPLE() {
 	u8 Flags = (u8)((k0 >> 16) & 0xff);
 	u32 Pitch = ((k0 & 0xffff)) << 1;
-	u32 addy = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	u32 addy = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u32 Accum = 0;
 	u32 location;
 	s16 *dst;
@@ -123,7 +123,7 @@ void RESAMPLE() {
 void RESAMPLE2() {
 	u8 Flags = (u8)((k0 >> 16) & 0xff);
 	u32 Pitch = ((k0 & 0xffff)) << 1;
-	u32 addy = (t9 & 0xffffff);// + SEGMENTS[(t9>>24)&0xf];
+	u32 addy = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u32 Accum = 0;
 	u32 location;
 	s16 *dst;
@@ -134,7 +134,7 @@ void RESAMPLE2() {
 	u32 dstPtr = (AudioOutBuffer / 2);
 
 	if (addy > (1024 * 1024 * 8))
-		addy = (t9 & 0xffffff);
+		addy = t9;
 
 	srcPtr -= 4;
 
@@ -169,7 +169,7 @@ void RESAMPLE2() {
 void RESAMPLE3() {
 	u8 Flags = (u8)((t9 >> 0x1e));
 	u32 Pitch = ((t9 >> 0xe) & 0xffff) << 1;
-	u32 addy = (k0 & 0xffffff);
+	u32 addy = k0;
 	u32 Accum = 0;
 	u32 location;
 	s16 *dst;

@@ -397,10 +397,17 @@ typedef union {
 #define ENDIAN_SWAP_BIMI    (ENDIAN_M & 0x5 & 1)
 #define ENDIAN_SWAP_WORD    (ENDIAN_M & 0x4 & 0)
 
+#ifdef BIG_ENDIAN
 #define BES(address)    ((address) ^ ENDIAN_SWAP_BYTE)
 #define HES(address)    ((address) ^ ENDIAN_SWAP_HALF)
 #define MES(address)    ((address) ^ ENDIAN_SWAP_BIMI)
 #define WES(address)    ((address) ^ ENDIAN_SWAP_WORD)
+#else
+#define BES(address) (address)
+#define HES(address) (address)
+#define MES(address) (address)
+#define WES(address) (address)
+#endif
 
 /*
  * extra types of encoding for the well-known MIPS RISC architecture
