@@ -135,7 +135,7 @@ void HLEStart(AZI_OSTask* task)
 	loopval = 0;
 	memset(SEGMENTS, 0, 0x10 * 4);
 	isMKABI = false;
-	isZeldaABI = false;
+	isZeldaABI = true;
 
 	// Detect uCode
 	if (((u32*)UData)[0] != 0x1) {
@@ -239,7 +239,8 @@ void HLEStart(AZI_OSTask* task)
 
 		k0 = HLEPtr[x + 0];
 		t9 = HLEPtr[x + 1];
-		command = (unsigned char)((k0 >> 24) & 0xFF);
+		//command = (unsigned char)((k0 >> 24) & 0xFF);
+		command = _SHIFTR(k0, 24, 8);
 #if 0
 		assert(command == command % NUM_ABI_COMMANDS);
 		command %= NUM_ABI_COMMANDS;

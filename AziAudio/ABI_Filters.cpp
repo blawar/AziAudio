@@ -86,11 +86,11 @@ void FILTER2() {
 	static int cnt = 0;
 	static s16 *lutt6;
 	static s16 *lutt5;
-	u8 *save = DRAM + t9; // TODO FIX (t9 & 0xFFFFFF);
-	u8 t4 = (u8)((k0 >> 0x10) & 0xFF);
+	u8 *save = DRAM + t9;
+	u8 t4	 = (u8)_SHIFTR(k0, 16, 8);
 
 	if (t4 > 1) { // Then set the cnt variable
-		cnt = (k0 & 0xFFFF);
+		cnt   = _SHIFTR(k0, 0, 16);
 		lutt6 = (s16 *)save;
 		//				memcpy (dmem+0xFE0, rdram+(t9&0xFFFFFF), 0x10);
 		return;
@@ -115,7 +115,7 @@ void FILTER2() {
 	i16* inp2;
 	s32 out1[8];
 	s16 outbuff[0x3c0], *outp;
-	u32 inPtr = (u32)(k0 & 0xffff);
+	u32 inPtr = (u32)_SHIFTR(k0, 0, 16);
 
 	inp1 = (i16 *)(save);
 	outp = outbuff;

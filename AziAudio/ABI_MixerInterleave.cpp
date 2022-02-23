@@ -12,9 +12,9 @@
 #include "audiohle.h"
 
 void ADDMIXER() {
-	s16 Count = (k0 >> 12) & 0x0FF0;
-	u16 InBuffer = (t9 >> 16);
-	u16 OutBuffer = t9 & 0xffff;
+	s16 Count = _SHIFTR(k0, 16, 8) << 4;
+	u16 InBuffer  = _SHIFTR(t9, 16, 16);
+	u16 OutBuffer = _SHIFTR(t9, 0, 16);
 
 	s16 *inp, *outp;
 	s32 temp;
@@ -28,10 +28,10 @@ void ADDMIXER() {
 }
 
 void HILOGAIN() {
-	u16 cnt = k0 & 0xffff;
-	u16 out = (t9 >> 16) & 0xffff;
-	s16 hi = (s16)((k0 >> 4) & 0xf000);
-	u16 lo = (k0 >> 20) & 0xf;
+	u16 cnt = _SHIFTR(k0, 0, 16);
+	u16 out = _SHIFTR(t9, 16, 16);
+	s16 hi	= _SHIFTR(t9, 0, 16); // TODO CHECK
+	u16 lo	= _SHIFTR(k0, 16, 8);
 	s16 *src;
 
 	src = (s16 *)(BufferSpace + out);
@@ -72,9 +72,9 @@ void INTERLEAVE() {
 }
 
 void INTERL2() {
-	s16 Count = k0 & 0xFFFF;
-	u16 Out = t9 & 0xffff;
-	u16 In  = (t9 >> 16);
+	s16 Count = _SHIFTR(k0, 0, 16);
+	u16 Out	  = _SHIFTR(t9, 0, 16);
+	u16 In	  = _SHIFTR(t9, 16, 16);
 	u8* src;
 	u8* dst;
 
@@ -94,18 +94,18 @@ void INTERLEAVE2() { // Needs accuracy verification...
 	u16 *inSrcR;
 	u16 *inSrcL;
 	u16 Left, Right;
-	u32 count;
-	count = ((k0 >> 12) & 0xFF0);
+	u32 count = _SHIFTR(k0, 16, 8) << 4;
+
 	if (count == 0) {
 		outbuff = (u16 *)(AudioOutBuffer + BufferSpace);
 		count = AudioCount;
 	}
 	else {
-		outbuff = (u16 *)((k0 & 0xFFFF) + BufferSpace);
+		outbuff = (u16*)(_SHIFTR(k0, 0, 16) + BufferSpace);
 	}
 
-	inR = t9 & 0xFFFF;
-	inL = (t9 >> 16) & 0xFFFF;
+	inR = _SHIFTR(t9, 0, 16);
+	inL = _SHIFTR(t9, 16, 16);
 
 	inSrcR = (u16 *)(BufferSpace + inR);
 	inSrcL = (u16 *)(BufferSpace + inL);
@@ -173,10 +173,10 @@ void MIXER() {
 }
 
 void MIXER2() { // Needs accuracy verification...
-	u16 dmemin = (u16)(t9 >> 0x10);
-	u16 dmemout = (u16)(t9 & 0xFFFF);
-	u32 count = ((k0 >> 12) & 0xFF0);
-	s32 gain = (s16)(k0 & 0xFFFF) * 2;
+	u16 dmemin  = (u16)_SHIFTR(t9, 16, 16);
+	u16 dmemout = (u16)_SHIFTR(t9, 0, 16);
+	u32 count = _SHIFTR(k0, 16, 8);
+	s32 gain = (s16)_SHIFTR(k0, 0, 16) * 2;
 	s32 temp;
 
 	for (u32 x = 0; x < count; x += 2) { // I think I can do this a lot easier 

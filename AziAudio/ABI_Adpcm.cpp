@@ -178,7 +178,7 @@ void ADPCM_madd(s32* a, s16* book1, s16* book2, s16 l1, s16 l2, s16* inp)
 }
 
 void ADPCM() { // Work in progress! :)
-	u8 Flags = (u8)((k0 >> 16) & 0xff);
+	u8 Flags = _SHIFTR(k0, 16, 8);
 	//u16 Gain = (u16)(k0 & 0xffff);
 	u32 Address = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u16 inPtr = 0;
@@ -283,12 +283,13 @@ void ADPCM() { // Work in progress! :)
 }
 
 void ADPCM2() { // Verified to be 100% Accurate...
-	u8 Flags = (u8)((k0 >> 16) & 0xff);
-//	u16 Gain = (u16)(k0 & 0xffff);
+	u8 Flags = (u8)_SHIFTR(k0, 16, 8);
+	//	u16 Gain = (u16)(k0 & 0xffff);
 	u32 Address = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u16 inPtr = 0;
 	//s16 *out=(s16 *)(testbuff+(AudioOutBuffer>>2));
 	s16 *out = (s16 *)(BufferSpace + AudioOutBuffer);
+	s16* outMax = (s16 *)(BufferSpace + sizeof(BufferSpace) );
 //	u8 *in = (u8 *)(BufferSpace + AudioInBuffer);
 	s16 count = (s16)AudioCount;
 	int vscale;
@@ -332,7 +333,7 @@ void ADPCM2() { // Verified to be 100% Accurate...
 	s16 inp1[8];
 	s16 inp2[8];
 	out += 16;
-	while (count>0) {
+	while (count>0 && out < outMax) {
 		u8 code = BufferSpace[BES(AudioInBuffer + inPtr)];
 		index = code & 0xf;
 		index <<= 4;
@@ -517,13 +518,11 @@ void LOADADPCM() { // Loads an ADPCM table - Works 100% Now 03-13-01
 }
 
 void LOADADPCM2() { // Loads an ADPCM table - Works 100% Now 03-13-01
-	u32 v0;
 	size_t i, limit;
 
-	v0 = t9;// + SEGMENTS[(t9>>24)&0xf];
-	u16 *table = (u16 *)(DRAM + v0); // Zelda2 Specific...
+	u16 *table = (u16 *)(DRAM + t9); // Zelda2 Specific...
 
-	limit = (k0 & 0x0000FFFF) >> 4;
+	limit = _SHIFTR(k0, 0, 24);
 	for (i = 0; i < limit; i++)
 		swap_elements(&adpcmtable[8*i], &table[8*i]);
 }

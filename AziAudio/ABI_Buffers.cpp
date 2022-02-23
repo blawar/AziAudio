@@ -20,14 +20,13 @@
 
 void CLEARBUFF() {
 	u32 addr = (u32)k0;
-	u32 count = (u32)(t9 & 0xffff);
-	addr &= FFFC_MASK;
+	u16 count = (t9 & 0xffff);
 	memset(BufferSpace + addr, 0, (count + 3) & FFFC_MASK);
 }
 
 void CLEARBUFF2() {
-	u16 addr = (u16)k0;
-	u16 count = (u16)(t9 & 0xffff);
+	u32 addr  = _SHIFTR(k0, 0, 16);
+	u16 count = t9;
 	if (count > 0)
 		memset(BufferSpace + addr, 0, count);
 }
@@ -61,11 +60,11 @@ void DMEMMOVE2() { // Needs accuracy verification...
 	u32 cnt;
 	if ((t9 & 0xffff) == 0)
 		return;
-	v0 = (k0 & 0xFFFF);
-	v1 = (t9 >> 0x10);
+	v0 = _SHIFTR(k0, 0, 16);
+	v1 = _SHIFTR(t9, 16, 16);
 	//assert ((v1 & 0x3) == 0);
 	//assert ((v0 & 0x3) == 0);
-	u32 count = ((t9 + 3) & FFFC_MASK);
+	u32 count = _SHIFTR(t9, 0, 16);
 	//v0 = (v0) & FFFC_MASK;
 	//v1 = (v1) & FFFC_MASK;
 
@@ -95,9 +94,9 @@ void DMEMMOVE3() { // Needs accuracy verification...
 }
 
 void DUPLICATE2() {
-	u16 Count = (k0 >> 16) & 0xff;
-	u16 In = k0 & 0xffff;
-	u16 Out = (t9 >> 16);
+	u16 Count = _SHIFTR(k0, 16, 8);
+	u16 In	  = _SHIFTR(k0, 0, 16);
+	u16 Out	  = _SHIFTR(t9, 16, 16);
 
 	u16 buff[64];
 
@@ -119,11 +118,13 @@ void LOADBUFF() { // memcpy causes static... endianess issue :(
 	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), DRAM + v0, (AudioCount + 3) & FFFC_MASK);
 }
 
-void LOADBUFF2() { // Needs accuracy verification...
-	u32 v0;
-	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
-	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(BufferSpace + (k0 & FFFC_MASK), DRAM + v0, (cnt + 3) & FFFC_MASK);
+void LOADBUFF2()
+{ // Needs accuracy verification...
+	auto src = (void*)t9;
+	u16 dmem = _SHIFTR(k0, 0, 16);
+	u32 cnt	 = min(_SHIFTR(k0, 16, 8) << 4, sizeof(BufferSpace) - dmem);
+
+	memcpy(BufferSpace + dmem, src, cnt);
 }
 
 void LOADBUFF3() {
@@ -145,7 +146,7 @@ void SAVEBUFF() { // memcpy causes static... endianess issue :(
 
 void SAVEBUFF2() { // Needs accuracy verification...
 	u32 v0;
-	u32 cnt = (((k0 >> 0xC) + 3) & 0xFFC);
+	u32 cnt = _SHIFTR(k0, 16, 8) << 4;
 	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
 	memcpy(DRAM + v0, BufferSpace + (k0 & FFFC_MASK), (cnt + 3) & FFFC_MASK);
 }
@@ -192,9 +193,9 @@ void SETBUFF() { // Should work ;-)
 }
 
 void SETBUFF2() {
-	AudioInBuffer = (u16)(k0 & 0xFFFF);           // 0x00
-	AudioOutBuffer = (u16)(t9 >> 0x10);   // 0x02
-	AudioCount = (u16)(t9 & 0xFFFF);           // 0x04
+	AudioInBuffer  = (u16)_SHIFTR(k0, 0, 16);       // 0x00
+	AudioOutBuffer = (u16)_SHIFTR(t9, 16, 16); // 0x02
+	AudioCount     = (u16)_SHIFTR(t9, 0, 16);	// 0x04
 }
 
 void SETLOOP() {
@@ -204,7 +205,7 @@ void SETLOOP() {
 }
 
 void SETLOOP2() {
-	loopval = t9; // No segment?
+	loopval = t9;
 }
 
 void SETLOOP3() {

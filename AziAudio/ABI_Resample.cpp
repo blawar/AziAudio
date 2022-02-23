@@ -121,8 +121,8 @@ void RESAMPLE() {
 }
 
 void RESAMPLE2() {
-	u8 Flags = (u8)((k0 >> 16) & 0xff);
-	u32 Pitch = ((k0 & 0xffff)) << 1;
+	u8 Flags  = _SHIFTR(k0, 16, 8);
+	u32 Pitch = _SHIFTR(k0, 0, 16) << 1;
 	u32 addy = t9;// + SEGMENTS[(t9>>24)&0xf];
 	u32 Accum = 0;
 	u32 location;

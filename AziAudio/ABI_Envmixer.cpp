@@ -56,13 +56,13 @@ void ENVSETUP1() {
 	u16 tmp;
 
 	//fprintf (dfile, "ENVSETUP1: k0 = %08X, t9 = %08X\n", k0, t9);
-	t3 = (s16)(k0 & 0xFFFF);
-	tmp = ((k0 >> 0x8) & 0xFF00);
+	t3     = (s16)_SHIFTR(k0, 0, 16);
+	tmp    = ((_SHIFTR(k0, 16, 8)) & 0xFF00);
 	env[4] = (u16)tmp;
 	tmp += t3;
 	env[5] = (u16)tmp;
-	s5 = (s16)(t9 >> 0x10);
-	s6 = (s16)(t9 & 0xFFFF);
+	s5     = (s16)_SHIFTR(t9, 16, 16);
+	s6 = (s16)_SHIFTR(t9, 0, 16);
 	//fprintf (dfile, "	t3 = %X / s5 = %X / s6 = %X / env[4] = %X / env[5] = %X\n", t3, s5, s6, env[4], env[5]);
 }
 
@@ -416,7 +416,7 @@ void ENVMIXER2() {
 
 	s16 *bufft6, *bufft7, *buffs0, *buffs1;
 	s16 *buffs3;
-	s32 count;
+	s32 count = _SHIFTR(k0, 8, 8);
 	u32 adder;
 	int x;
 
@@ -437,8 +437,6 @@ void ENVMIXER2() {
 	v2[1] = 0 - (s16)((k0 & 0x1));
 	v2[2] = 0 - (s16)((k0 & 0x8) >> 1);
 	v2[3] = 0 - (s16)((k0 & 0x4) >> 1);
-
-	count = (k0 >> 8) & 0xff;
 
 	if (!isMKABI) {
 		s5 *= 2; s6 *= 2; t3 *= 2;
