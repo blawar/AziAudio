@@ -56,25 +56,23 @@ void DMEMMOVE() {
 }
 
 void DMEMMOVE2() { // Needs accuracy verification...
-	u32 v0, v1;
+	u32 input, output;
 	u32 cnt;
 	if ((t9 & 0xffff) == 0)
 		return;
-	v0 = _SHIFTR(k0, 0, 16);
-	v1 = _SHIFTR(t9, 16, 16);
-	//assert ((v1 & 0x3) == 0);
-	//assert ((v0 & 0x3) == 0);
+	input = _SHIFTR(k0, 0, 16);
+	output = _SHIFTR(t9, 16, 16);
 	u32 count = _SHIFTR(t9, 0, 16);
-	//v0 = (v0) & FFFC_MASK;
-	//v1 = (v1) & FFFC_MASK;
-
-	//memcpy (dmem+v1, dmem+v0, count-1);
-	for (cnt = 0; cnt < count; cnt += 4) {
-		BufferSpace[BES(v1 + cnt + 0)] = BufferSpace[BES(v0 + cnt + 0)];
-		BufferSpace[BES(v1 + cnt + 1)] = BufferSpace[BES(v0 + cnt + 1)];
-		BufferSpace[BES(v1 + cnt + 2)] = BufferSpace[BES(v0 + cnt + 2)];
-		BufferSpace[BES(v1 + cnt + 3)] = BufferSpace[BES(v0 + cnt + 3)];
-	}
+	count	  = min(count, sizeof(BufferSpace) - output);
+	count	  = min(count, sizeof(BufferSpace) - input);
+	memcpy(BufferSpace + output, BufferSpace + input, count);
+	//memcpy (dmem+output, dmem+input, count-1);
+	/*for (cnt = 0; cnt < count; cnt += 4) {
+		BufferSpace[BES(output + cnt + 0)] = BufferSpace[BES(input + cnt + 0)];
+		BufferSpace[BES(output + cnt + 1)] = BufferSpace[BES(input + cnt + 1)];
+		BufferSpace[BES(output + cnt + 2)] = BufferSpace[BES(input + cnt + 2)];
+		BufferSpace[BES(output + cnt + 3)] = BufferSpace[BES(input + cnt + 3)];
+	}*/
 }
 
 void DMEMMOVE3() { // Needs accuracy verification...
@@ -84,7 +82,7 @@ void DMEMMOVE3() { // Needs accuracy verification...
 	v1 = (t9 >> 0x10) + 0x4f0;
 	u32 count = ((t9 + 3) & FFFC_MASK);
 
-	//memcpy (dmem+v1, dmem+v0, count-1);
+	//memcpy (dmem+output, dmem+input, count-1);
 	for (cnt = 0; cnt < count; cnt += 4) {
 		BufferSpace[BES(v1 + cnt + 0)] = BufferSpace[BES(v0 + cnt + 0)];
 		BufferSpace[BES(v1 + cnt + 1)] = BufferSpace[BES(v0 + cnt + 1)];
