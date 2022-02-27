@@ -21,12 +21,12 @@
 void CLEARBUFF() {
 	u32 addr = (u32)k0;
 	u16 count = (t9 & 0xffff);
-	memset(BufferSpace + addr, 0, (count + 3) & FFFC_MASK);
+	memset(BufferSpace + addr, 0, (count) & FFFC_MASK);
 }
 
 void CLEARBUFF2() {
-	u32 addr  = _SHIFTR(k0, 0, 16);
-	u16 count = t9;
+	u16 addr  = _SHIFTR(k0, 0, 16);
+	u16 count = min(t9, sizeof(BufferSpace) - addr);
 	if (count > 0)
 		memset(BufferSpace + addr, 0, count);
 }
@@ -45,7 +45,7 @@ void DMEMMOVE() {
 	v0 = (k0 & 0xFFFF);
 	v1 = (t9 >> 0x10);
 
-	u32 count = ((t9 + 3) & FFFC_MASK);
+	u32 count = ((t9) & FFFC_MASK);
 
 	for (cnt = 0; cnt < count; cnt += 4) {
 		BufferSpace[BES(v1 + cnt + 0)] = BufferSpace[BES(v0 + cnt + 0)];
@@ -80,7 +80,7 @@ void DMEMMOVE3() { // Needs accuracy verification...
 	u32 cnt;
 	v0 = (k0 & 0xFFFF) + 0x4f0;
 	v1 = (t9 >> 0x10) + 0x4f0;
-	u32 count = ((t9 + 3) & FFFC_MASK);
+	u32 count = ((t9) & FFFC_MASK);
 
 	//memcpy (dmem+output, dmem+input, count-1);
 	for (cnt = 0; cnt < count; cnt += 4) {
@@ -113,7 +113,7 @@ void LOADBUFF() { // memcpy causes static... endianess issue :(
 	if (AudioCount == 0)
 		return;
 	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), DRAM + v0, (AudioCount + 3) & FFFC_MASK);
+	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), DRAM + v0, (AudioCount) & FFFC_MASK);
 }
 
 void LOADBUFF2()
@@ -139,14 +139,19 @@ void SAVEBUFF() { // memcpy causes static... endianess issue :(
 	if (AudioCount == 0)
 		return;
 	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(DRAM + v0, BufferSpace + (AudioOutBuffer & FFFC_MASK), (AudioCount + 3) & FFFC_MASK);
+	memcpy(DRAM + v0, BufferSpace + (AudioOutBuffer & FFFC_MASK), (AudioCount) & FFFC_MASK);
 }
 
 void SAVEBUFF2() { // Needs accuracy verification...
 	u32 v0;
 	u32 cnt = _SHIFTR(k0, 16, 8) << 4;
+
+	if(cnt >= 0xFF)
+	{
+		int x = 0;
+	}
 	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(DRAM + v0, BufferSpace + (k0 & FFFC_MASK), (cnt + 3) & FFFC_MASK);
+	memcpy(DRAM + v0, BufferSpace + (k0 & FFFC_MASK), (cnt) & FFFC_MASK);
 }
 
 void SAVEBUFF3() {
