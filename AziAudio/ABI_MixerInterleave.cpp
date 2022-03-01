@@ -30,8 +30,8 @@ void ADDMIXER() {
 void HILOGAIN() {
 	u16 cnt = _SHIFTR(k0, 0, 16);
 	u16 out = _SHIFTR(t9, 16, 16);
-	s16 hi	= _SHIFTR(t9, 0, 16); // TODO CHECK
-	u16 lo	= _SHIFTR(k0, 16, 8);
+	s16 lo	= _SHIFTR(t9, 0, 16); // TODO CHECK
+	u16 hi	= _SHIFTR(k0, 16, 8);
 	s16 *src;
 
 	src = (s16 *)(BufferSpace + out);
