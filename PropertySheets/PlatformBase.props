@@ -3,8 +3,7 @@
 
   <PropertyGroup Label="Configuration">
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset Condition="'$(DefaultPlatformToolset)'!='' AND '$(DefaultPlatformToolset)'!='v142'">$(DefaultPlatformToolset)</PlatformToolset>
-    <PlatformToolset Condition="'$(DefaultPlatformToolset)'=='v142'">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset>$(DefaultPlatformToolset)</PlatformToolset>
   </PropertyGroup>
 
   <ImportGroup Label="PropertySheets">
