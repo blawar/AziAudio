@@ -158,7 +158,7 @@ extern s16 acc_clamped[N];
 /* The SSE1 and SSE2 headers always define these macro functions: */
 #undef SSE2_SUPPORT
 #if defined(_MM_SHUFFLE) && defined(_MM_SHUFFLE2)
-#define SSE2_SUPPORT
+//#define SSE2_SUPPORT
 #endif
 
 #if 0
