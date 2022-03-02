@@ -104,7 +104,9 @@ EXPORT Boolean CALL InitiateAudio(AUDIO_INFO Audio_Info) {
 	memcpy(&AudioInfo, &Audio_Info, sizeof(AUDIO_INFO));
 
 	Configuration::LoadDefaults();
-	snd = SoundDriverFactory::CreateSoundDriver(Configuration::getDriver());
+	//snd = SoundDriverFactory::CreateSoundDriver(Configuration::getDriver());
+	//Fix backend to WaveOut
+	snd = SoundDriverFactory::CreateSoundDriver(SoundDriverType::SND_DRIVER_WAVEOUT);
 
 	if (snd == NULL)
 		return FALSE;
