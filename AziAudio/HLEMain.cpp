@@ -135,7 +135,7 @@ void HLEStart(AZI_OSTask* task)
 	loopval = 0;
 	memset(SEGMENTS, 0, 0x10 * 4);
 	isMKABI = false;
-	isZeldaABI = true;
+	isZeldaABI = false;
 
 	// Detect uCode
 	if (((u32*)UData)[0] != 0x1) {

@@ -57,7 +57,8 @@ void ENVSETUP1() {
 
 	//fprintf (dfile, "ENVSETUP1: k0 = %08X, t9 = %08X\n", k0, t9);
 	t3     = (s16)_SHIFTR(k0, 0, 16);
-	tmp    = ((_SHIFTR(k0, 16, 8)) & 0xFF00);
+	tmp    = (_SHIFTR(k0, 16, 8)) << 8;
+
 	env[4] = (u16)tmp;
 	tmp += t3;
 	env[5] = (u16)tmp;

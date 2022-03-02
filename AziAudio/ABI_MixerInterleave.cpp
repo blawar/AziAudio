@@ -30,8 +30,10 @@ void ADDMIXER() {
 void HILOGAIN() {
 	u16 cnt = _SHIFTR(k0, 0, 16);
 	u16 out = _SHIFTR(t9, 16, 16);
-	s16 lo	= _SHIFTR(t9, 0, 16); // TODO CHECK
-	u16 hi	= _SHIFTR(k0, 16, 8);
+	//s16 lo	= _SHIFTR(t9, 0, 16); // TODO CHECK
+	//u16 hi	= _SHIFTR(k0, 16, 8);
+	s16 hi = (s16)((k0 >> 4) & 0xf000);
+	u16 lo = (k0 >> 20) & 0xf;
 	s16 *src;
 
 	src = (s16 *)(BufferSpace + out);
@@ -175,7 +177,8 @@ void MIXER() {
 void MIXER2() { // Needs accuracy verification...
 	u16 dmemin  = (u16)_SHIFTR(t9, 16, 16);
 	u16 dmemout = (u16)_SHIFTR(t9, 0, 16);
-	u32 count = _SHIFTR(k0, 16, 8);
+	u32 count = _SHIFTR(k0, 16, 8) << 4;
+
 	s32 gain = (s16)_SHIFTR(k0, 0, 16) * 2;
 	s32 temp;
 
