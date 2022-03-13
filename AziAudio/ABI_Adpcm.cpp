@@ -202,10 +202,10 @@ void ADPCM() { // Work in progress! :)
 	if (!(Flags & 0x1))
 	{
 		if (Flags & 0x2) {
-			memcpy(out, &DRAM[loopval], 32);
+			memcpy(out, (void*)loopval, 32);
 		}
 		else {
-			memcpy(out, &DRAM[Address], 32);
+			memcpy(out, (void*)Address, 32);
 		}
 	}
 
@@ -279,7 +279,7 @@ void ADPCM() { // Work in progress! :)
 		count -= 32;
 	}
 	out -= 16;
-	memcpy(&DRAM[Address], out, 32);
+	memcpy((void*)Address, out, 32);
 }
 
 void ADPCM2() { // Verified to be 100% Accurate...
@@ -309,9 +309,9 @@ void ADPCM2() { // Verified to be 100% Accurate...
 
 	if (!(Flags & 0x1)) {
 		if (Flags & 0x2)
-			memcpy(out, &DRAM[loopval], 32);
+			memcpy(out, (void*)loopval, 32);
 		else
-			memcpy(out, &DRAM[Address], 32);
+			memcpy(out, (void*)Address, 32);
 	}
 	if (Flags & 0x4) { // Needed for Zelda MM
 		srange = 0xE;
@@ -401,7 +401,7 @@ void ADPCM2() { // Verified to be 100% Accurate...
 		count -= 32;
 	}
 	out -= 16;
-	memcpy(&DRAM[Address], out, 32);
+	memcpy((void*)Address, out, 32);
 }
 
 void ADPCM3() { // Verified to be 100% Accurate...
@@ -424,9 +424,9 @@ void ADPCM3() { // Verified to be 100% Accurate...
 
 	if (!(Flags & 0x1)) {
 		if (Flags & 0x2)
-			memcpy(out, &DRAM[loopval], 32);
+			memcpy(out, (void*)loopval, 32);
 		else
-			memcpy(out, &DRAM[Address], 32);
+			memcpy(out, (void*)Address, 32);
 	}
 
 	s16 l1 = out[15];
@@ -498,7 +498,7 @@ void ADPCM3() { // Verified to be 100% Accurate...
 		count -= 32;
 	}
 	out -= 16;
-	memcpy(&DRAM[Address], out, 32);
+	memcpy((void*)Address, out, 32);
 }
 
 void LOADADPCM() { // Loads an ADPCM table - Works 100% Now 03-13-01
@@ -510,7 +510,7 @@ void LOADADPCM() { // Loads an ADPCM table - Works 100% Now 03-13-01
 	//		v0 = (t9 & 0xffffff);
 	//	memcpy (dmem+0x4c0, rdram+v0, k0&0xffff); // Could prolly get away with not putting this in dmem
 	//	assert ((k0&0xffff) <= 0x80);
-	u16 *table = (u16 *)(DRAM + v0);
+	u16 *table = (u16 *)v0;
 
 	limit = (k0 & 0x0000FFFF) >> 4;
 	for (i = 0; i < limit; i++)
@@ -520,7 +520,7 @@ void LOADADPCM() { // Loads an ADPCM table - Works 100% Now 03-13-01
 void LOADADPCM2() { // Loads an ADPCM table - Works 100% Now 03-13-01
 	size_t i, limit;
 
-	u16 *table = (u16 *)(DRAM + t9); // Zelda2 Specific...
+	u16 *table = (u16 *)t9; // Zelda2 Specific...
 
 	limit = _SHIFTR(k0, 0, 24);
 	for (i = 0; i < limit; i++)
@@ -534,7 +534,7 @@ void LOADADPCM3() { // Loads an ADPCM table - Works 100% Now 03-13-01
 	v0 = (t9 & 0xffffff);
 	//memcpy (dmem+0x3f0, rdram+v0, k0&0xffff);
 	//assert ((k0&0xffff) <= 0x80);
-	u16 *table = (u16 *)(DRAM + v0);
+	u16 *table = (u16 *)v0;
 
 	limit = (k0 & 0x0000FFFF) >> 4;
 	for (i = 0; i < limit; i++)

@@ -113,7 +113,7 @@ void LOADBUFF() { // memcpy causes static... endianess issue :(
 	if (AudioCount == 0)
 		return;
 	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), DRAM + v0, (AudioCount) & FFFC_MASK);
+	memcpy(BufferSpace + (AudioInBuffer & FFFC_MASK), (void*)v0, (AudioCount) & FFFC_MASK);
 }
 
 void LOADBUFF2()
@@ -143,15 +143,14 @@ void SAVEBUFF() { // memcpy causes static... endianess issue :(
 }
 
 void SAVEBUFF2() { // Needs accuracy verification...
-	u32 v0;
 	u32 cnt = _SHIFTR(k0, 16, 8) << 4;
 
 	if(cnt >= 0xFF)
 	{
 		int x = 0;
 	}
-	v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
-	memcpy(DRAM + v0, BufferSpace + (k0 & FFFC_MASK), (cnt) & FFFC_MASK);
+	//v0 = t9; // TODO FIX (t9 & 0xfffffc);// + SEGMENTS[(t9>>24)&0xf];
+	memcpy((void*)t9, BufferSpace + (k0 & FFFC_MASK), (cnt) & FFFC_MASK);
 }
 
 void SAVEBUFF3() {
