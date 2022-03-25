@@ -138,10 +138,12 @@ SoundDriverType SoundDriverFactory::DefaultDriver()
 
 int SoundDriverFactory::EnumDrivers(SoundDriverType *drivers, int max_entries)
 {
+#ifdef USE_PRINTF
 	if(InitDrivers() != FactoryNextSlot)
 	{
 		printf("Expected %d drivers, got %d", InitDrivers(), FactoryNextSlot);
 	}
+#endif
 
 	int retVal = 0;
 	for (int x = 0; x < FactoryNextSlot; x++)
