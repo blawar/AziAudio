@@ -178,7 +178,6 @@ void HLEStart(AZI_OSTask* task)
 		}
 		else  
 		{
-			u32 d = *(u32*)(UData + (0x10));
 			switch (*(u32*)(UData + (0x10))) // ABI2 and MusyX
 			{
 				case 0x00010010: // MusyX v2 (IndianaJones, BattleForNaboo)
@@ -350,7 +349,7 @@ void vsats128(s16* vd, s32* vs)
     result = _mm_packs_epi32(xmm_hi, xmm_lo);
     _mm_storeu_si128((__m128i *)vd, result);
 #else
-    register size_t i;
+    size_t i;
 
     for (i = 0; i < 8; i++)
         vd[i] = pack_signed(vs[i]);
@@ -386,7 +385,7 @@ void swap_elements(void * vd, const void * vs)
     _mm_storeu_si128((__m128i *)vd, RSP_as_XMM);
 #else
     i16 temp_vector[8];
-    register size_t i;
+    size_t i;
 
     for (i = 0; i < 8; i++)
         temp_vector[i] = ((i16 *)vs)[i];

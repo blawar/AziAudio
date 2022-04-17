@@ -267,6 +267,7 @@ typedef u64     uint64_t;
 #define HAVE_STANDARD_INTEGER_TYPES
 #endif
 
+#ifndef HAVE_FLOAT_TYPES
 /*
  * Single- and double-precision floating-point data types have a little less
  * room for maintenance across different CPU processors, as the C standard
@@ -276,6 +277,8 @@ typedef u64     uint64_t;
  */
 typedef float                   f32;
 typedef double                  f64;
+#define HAVE_FLOAT_TYPES
+#endif
 
 /*
  * Pointer types, serving as the memory reference address to the actual type.
