@@ -52,7 +52,9 @@ protected:
 	static void setDisallowSleepDS8(bool value) { currentSettings.configDisallowSleepDS8 = value; };
 	static void setResTimer(bool value) { currentSettings.configResTimer = value; };
 
+#ifdef _WIN32
 	static void ResetAdvancedPage(HWND hDlg);
+#endif
 
 public:
 	static void LoadDefaults();

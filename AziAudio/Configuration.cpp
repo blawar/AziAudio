@@ -45,10 +45,10 @@ SoundDriverType Configuration::configDriver;
 #ifdef _WIN32
 static GUID EnumDeviceGUID[20];
 static char EnumDeviceName[20][100];
+#endif
 static int EnumDeviceCount;
 static SoundDriverType EnumDriverType[10];
 static int EnumDriverCount;
-#endif
 
 const char *ConfigFile = "Config/AziCfg.bin";
 

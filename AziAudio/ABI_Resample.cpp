@@ -10,6 +10,7 @@
 ****************************************************************************/
 
 #include "audiohle.h"
+#include <string.h> // memcpy(), strcpy()
 
 static inline size_t align(size_t x, size_t amount)
 {
