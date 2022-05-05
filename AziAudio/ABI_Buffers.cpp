@@ -15,6 +15,7 @@
 #endif
 /* memset() and memcpy() */
 #include <string.h>
+#include <algorithm>
 
 #include "audiohle.h"
 
@@ -26,7 +27,7 @@ void CLEARBUFF() {
 
 void CLEARBUFF2() {
 	u16 addr  = _SHIFTR(k0, 0, 16);
-	u16 count = min(t9, sizeof(BufferSpace) - addr);
+	u16 count = std::min(t9, sizeof(BufferSpace) - addr);
 	if (count > 0)
 		memset(BufferSpace + addr, 0, count);
 }
@@ -63,8 +64,8 @@ void DMEMMOVE2() { // Needs accuracy verification...
 	input = _SHIFTR(k0, 0, 16);
 	output = _SHIFTR(t9, 16, 16);
 	u32 count = _SHIFTR(t9, 0, 16);
-	count	  = min(count, sizeof(BufferSpace) - output);
-	count	  = min(count, sizeof(BufferSpace) - input);
+	count	  = std::min(count, sizeof(BufferSpace) - output);
+	count	  = std::min(count, sizeof(BufferSpace) - input);
 	memcpy(BufferSpace + output, BufferSpace + input, count);
 	//memcpy (dmem+output, dmem+input, count-1);
 	/*for (cnt = 0; cnt < count; cnt += 4) {
@@ -120,7 +121,7 @@ void LOADBUFF2()
 { // Needs accuracy verification...
 	auto src = (void*)t9;
 	u16 dmem = _SHIFTR(k0, 0, 16);
-	u32 cnt	 = min(_SHIFTR(k0, 16, 8) << 4, sizeof(BufferSpace) - dmem);
+	u32 cnt	 = std::min(_SHIFTR(k0, 16, 8) << 4, sizeof(BufferSpace) - dmem);
 
 	memcpy(BufferSpace + dmem, src, cnt);
 }

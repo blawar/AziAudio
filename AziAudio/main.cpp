@@ -96,10 +96,12 @@ EXPORT Boolean CALL InitiateAudio(AUDIO_INFO Audio_Info) {
 	Dacrate = 0;
 	//CloseDLL ();
 
+#ifdef _WIN32
 	if (Configuration::getResTimer() == true)
 	{
 		SetTimerResolution();
 	}
+#endif
 
 	memcpy(&AudioInfo, &Audio_Info, sizeof(AUDIO_INFO));
 

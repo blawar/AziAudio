@@ -10,18 +10,21 @@
 ****************************************************************************/
 #include "SoundDriverFactory.h"
 #include "NoSoundDriver.h"
+#if defined(_WIN32) || defined(_XBOX)
 #include "DirectSoundDriver.h"
 #include "DirectSoundDriverLegacy.h"
 #include "WASAPISoundDriver.h"
 #include "WaveOutSoundDriver.h"
 #include "XAudio2SoundDriver.h"
 #include "XAudio2SoundDriverLegacy.h"
+#endif
 
 int SoundDriverFactory::FactoryNextSlot = 0;
 SoundDriverFactory::FactoryDriversStruct SoundDriverFactory::FactoryDrivers[MAX_FACTORY_DRIVERS];
 
 int SoundDriverFactory::InitDrivers()
 {
+#if defined(_WIN32) || defined(_XBOX)
 	return
 		NoSoundDriver::ClassRegistered
 		+ DirectSoundDriver::ClassRegistered
@@ -30,6 +33,9 @@ int SoundDriverFactory::InitDrivers()
 		+ WaveOutSoundDriver::ClassRegistered
 		+ XAudio2SoundDriver::ClassRegistered
 		+ XAudio2SoundDriverLegacy::ClassRegistered;
+#else
+	return NoSoundDriver::ClassRegistered;
+#endif
 }
 
 SoundDriverInterface* SoundDriverFactory::CreateSoundDriver(SoundDriverType DriverID)

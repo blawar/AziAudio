@@ -11,7 +11,11 @@
 
 #pragma once
 #include <cstdio>
+#if defined(_WIN32)
 #include <Windows.h>
+#else
+#include "winlnxdefs.h"
+#endif
 
 typedef struct 
 {

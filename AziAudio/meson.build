@@ -37,8 +37,6 @@ aziaudio_sources = [
   'ABI_MixerInterleave.cpp', 
   'ABI_Resample.cpp', 
   'Configuration.cpp', 
-  'DirectSoundDriver.cpp', 
-  'DirectSoundDriverLegacy.cpp', 
   'HLEMain.cpp', 
   'main.cpp', 
   'NoSoundDriver.cpp', 
@@ -46,6 +44,11 @@ aziaudio_sources = [
   'SoundDriverFactory.cpp', 
   'SoundDriverInterface.cpp', 
   'SoundDriverLegacy.cpp', 
+]
+
+aziaudo_windows_sources = [
+  'DirectSoundDriver.cpp', 
+  'DirectSoundDriverLegacy.cpp', 
   'WASAPISoundDriver.cpp', 
   'WaveOut.cpp', 
   'WaveOutSoundDriver.cpp', 

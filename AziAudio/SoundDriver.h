@@ -91,7 +91,7 @@ protected:
 #ifdef _WIN32
 		m_hMutex = NULL;
 #else
-		m_Mutex = NULL;
+		m_Mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 	}
 };
